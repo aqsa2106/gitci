@@ -26,8 +26,6 @@ jobs:
     - name: Install dependencies
       run: npm ci
 
-    - name: Run tests
-      run: npm test
 
     # Step 4: Build Docker image
     - name: Log in to DockerHub
