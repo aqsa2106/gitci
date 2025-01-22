@@ -1,8 +1,7 @@
-# Menggunakan base image yang ringan untuk Node.js
 FROM node:18-alpine
 
 # Menambahkan paket tambahan yang diperlukan
-RUN apk add --no-cache python3 make g++
+RUN apk add --no-cache python3 make g++ bash
 
 # Mengatur direktori kerja di dalam container
 WORKDIR /app
@@ -10,8 +9,8 @@ WORKDIR /app
 # Menyalin file package.json dan package-lock.json untuk instalasi dependensi
 COPY package*.json ./
 
-# Menginstal dependensi aplikasi (mode produksi untuk menghemat ukuran)
-RUN npm install --production
+# Menginstal semua dependensi
+RUN npm install
 
 # Menyalin seluruh file proyek ke dalam container
 COPY . .
