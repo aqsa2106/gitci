@@ -3,7 +3,7 @@ name: CI/CD Pipeline for Nuxt App
 on:
   push:
     branches:
-      - main
+      - nuxt-version
   pull_request:
 
 jobs:
