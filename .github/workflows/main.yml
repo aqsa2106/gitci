@@ -26,7 +26,6 @@ jobs:
     - name: Install dependencies
       run: npm ci
 
-
     # Step 4: Build Docker image
     - name: Log in to DockerHub
       uses: docker/login-action@v2
@@ -53,3 +52,22 @@ jobs:
       uses: azure/setup-kubectl@v3
       with:
         version: 'latest'
+
+    # Step 3: Configure kubectl with KUBECONFIG
+    - name: Set up KubeConfig
+      env:
+        KUBECONFIG: ${{ secrets.KUBECONFIG }}
+      run: |
+        echo "${{ secrets.KUBECONFIG }}" | base64 --decode > kubeconfig
+        export KUBECONFIG=kubeconfig
+
+    # Step 4: Verify Kubernetes context
+    - name: Verify Kubernetes Context
+      run: kubectl get nodes
+
+    # Step 5: Apply Kubernetes manifests
+    - name: Deploy to Kubernetes
+      run: |
+        kubectl apply -f k8s/deployment.yaml
+        kubectl apply -f k8s/service.yaml
+        kubectl apply -f k8s/ingress.yaml
