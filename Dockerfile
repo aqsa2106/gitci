@@ -1,6 +1,9 @@
 # Menggunakan base image yang ringan untuk Node.js
 FROM node:18-alpine
 
+# Menambahkan paket tambahan yang diperlukan
+RUN apk add --no-cache python3 make g++
+
 # Mengatur direktori kerja di dalam container
 WORKDIR /app
 
