@@ -37,37 +37,3 @@ jobs:
       run: |
         docker build -t ${{ secrets.DOCKER_USERNAME }}/nuxt-app:latest .
         docker push ${{ secrets.DOCKER_USERNAME }}/nuxt-app:latest
-
-  deploy:
-    runs-on: ubuntu-latest
-    needs: build
-
-    steps:
-    # Step 1: Checkout the repository
-    - name: Checkout code
-      uses: actions/checkout@v3
-
-    # Step 2: Install kubectl
-    - name: Set up kubectl
-      uses: azure/setup-kubectl@v3
-      with:
-        version: 'latest'
-
-    # Step 3: Configure kubectl with KUBECONFIG
-    - name: Set up KubeConfig
-      env:
-        KUBECONFIG: ${{ secrets.KUBECONFIG }}
-      run: |
-        echo "${{ secrets.KUBECONFIG }}" | base64 --decode > kubeconfig
-        export KUBECONFIG=kubeconfig
-
-    # Step 4: Verify Kubernetes context
-    - name: Verify Kubernetes Context
-      run: kubectl get nodes
-
-    # Step 5: Apply Kubernetes manifests
-    - name: Deploy to Kubernetes
-      run: |
-        kubectl apply -f k8s/deployment.yaml
-        kubectl apply -f k8s/service.yaml
-        kubectl apply -f k8s/ingress.yaml
